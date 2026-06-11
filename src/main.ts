@@ -11,23 +11,15 @@ if (!app) {
 
 app.innerHTML = renderPage();
 
-const countdownContainer = document.createElement("div");
-countdownContainer.className = "countdown";
-countdownContainer.setAttribute("aria-live", "polite");
-countdownContainer.innerHTML = `
-  <span class="countdown-label">Faltam</span>
-  <div><strong data-countdown="days">000</strong><small>dias</small></div>
-  <div><strong data-countdown="hours">00</strong><small>horas</small></div>
-  <div><strong data-countdown="minutes">00</strong><small>min</small></div>
-  <div><strong data-countdown="seconds">00</strong><small>seg</small></div>
-`;
-
-document.querySelector(".hero-content")?.append(countdownContainer);
-
+const countdownContainer = document.querySelector<HTMLElement>(
+  "[data-countdown-root]",
+);
 const targetDate = new Date(eventConfig.dateIso);
 let countdownTimer: number | undefined;
 
 function updateCountdown() {
+  if (!countdownContainer) return;
+
   const value = getCountdown(targetDate);
 
   if (value.completed) {
