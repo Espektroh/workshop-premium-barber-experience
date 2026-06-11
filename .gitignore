@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.vercel/
+.superpowers/
+.playwright-mcp/
+work/
+outputs/
+qa/
+qa-*.md
+*.log
