@@ -167,9 +167,11 @@ ul {
 .brand {
   display: inline-flex;
   flex-direction: column;
+  justify-content: center;
   gap: 2px;
   line-height: 1;
   width: max-content;
+  min-height: 44px;
 }
 
 .brand-word {
@@ -420,7 +422,7 @@ ul {
 }
 
 .countdown small {
-  font-size: 0.66rem;
+  font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -712,6 +714,12 @@ ul {
   color: var(--blue);
 }
 
+.comparison-action {
+  display: flex;
+  justify-content: center;
+  margin-top: 44px;
+}
+
 /* ---------- Seção: para quem é ---------- */
 
 .audience-grid {
@@ -981,8 +989,40 @@ ul {
   color: var(--ink-soft);
 }
 
+.includes {
+  width: min(100%, 560px);
+  margin-top: 18px;
+  padding: 28px 30px 30px;
+  border: 1px solid var(--line);
+  text-align: left;
+}
+
+.includes h3 {
+  margin-bottom: 16px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+
+.includes li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 7px 0;
+  font-size: 0.97rem;
+  font-weight: 500;
+}
+
+.includes li svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: var(--blue);
+}
+
 .scarcity .primary-cta {
-  margin-top: 26px;
+  margin-top: 30px;
 }
 
 /* ---------- FAQ ---------- */
@@ -1174,11 +1214,18 @@ ul {
   background: var(--ink);
   color: var(--paper);
   transform: translateY(110%);
-  transition: transform 220ms ease;
+  visibility: hidden;
+  transition:
+    transform 220ms ease,
+    visibility 0s 220ms;
 }
 
 .mobile-cta.is-visible {
   transform: translateY(0);
+  visibility: visible;
+  transition:
+    transform 220ms ease,
+    visibility 0s;
 }
 
 .mobile-cta > span {
@@ -1191,11 +1238,11 @@ ul {
 
 .mobile-cta > span small {
   font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(244, 241, 234, 0.66);
+  color: rgba(244, 241, 234, 0.72);
 }
 
 .mobile-cta .cta-button {
@@ -1407,12 +1454,17 @@ ul {
   }
 
   .countdown-label {
-    padding: 0 12px;
+    padding: 0 10px;
   }
 
   .countdown > div {
     flex: 1;
     min-width: 0;
+    padding: 12px 4px;
+  }
+
+  .countdown strong {
+    font-size: 1.3rem;
   }
 
   .hero-facts {
@@ -1443,6 +1495,15 @@ ul {
   .final-action {
     flex-direction: column;
     gap: 14px;
+  }
+
+  .final-meta span {
+    padding: 14px 12px;
+    letter-spacing: 0.1em;
+  }
+
+  .includes {
+    padding: 22px 20px 24px;
   }
 
   .mobile-cta {

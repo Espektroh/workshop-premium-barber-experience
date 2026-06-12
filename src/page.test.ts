@@ -28,7 +28,7 @@ describe("renderPage", () => {
     const page = renderPage();
 
     expect(eventConfig.ctaUrl).toBe("");
-    expect(page.match(/class="[^"]*cta-button[^"]*"/g)).toHaveLength(5);
+    expect(page.match(/class="[^"]*cta-button[^"]*"/g)).toHaveLength(6);
     expect(page).not.toContain('class="cta-button" href=');
   });
 

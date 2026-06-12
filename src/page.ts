@@ -45,7 +45,7 @@ const gains = [
   [
     "02",
     "Padrão técnico que sustenta preço",
-    "Consistência de resultado é o que permite cobrar mais sem perder cliente.",
+    "Consistência de resultado é a base para sustentar preços mais altos.",
   ],
   [
     "03",
@@ -60,7 +60,7 @@ const gains = [
   [
     "05",
     "Experiência que fideliza",
-    "Transforme atendimento em recorrência e indicação — a agenda para de oscilar.",
+    "Transforme atendimento em recorrência e indicação — o caminho para uma agenda mais previsível.",
   ],
   [
     "06",
@@ -71,11 +71,19 @@ const gains = [
 
 const experienceItems = [
   "Demonstrações de corte ao vivo",
-  "Sala com 75 profissionais selecionados",
+  `Sala limitada a ${eventConfig.capacity} profissionais`,
   "Networking que vale agenda",
   "Coffee break incluso",
   "Estrutura profissional de som e projeção",
   "Encerramento até as 18h",
+];
+
+const includedItems = [
+  "Dia completo de imersão presencial",
+  "Demonstrações ao vivo da Fórmula D.F.S",
+  "Conteúdo de posicionamento e precificação",
+  `Networking com até ${eventConfig.capacity} profissionais`,
+  "Coffee break incluso",
 ];
 
 const occupancy = getOccupancy(eventConfig.capacity, eventConfig.occupiedSeats);
@@ -83,17 +91,24 @@ const occupancy = getOccupancy(eventConfig.capacity, eventConfig.occupiedSeats);
 function renderOccupancy() {
   if (occupancy.occupied === 0) {
     return `
-      <p class="scarcity-note reveal">Turma única. Presencial. Sem gravação e sem segunda data marcada.</p>
+      <p class="scarcity-note reveal">Turma única. Presencial. Nenhuma outra data marcada.</p>
     `;
   }
 
   return `
-    <div class="occupancy reveal" aria-label="${occupancy.occupied} de ${eventConfig.capacity} vagas ocupadas">
+    <div class="occupancy reveal" role="group" aria-label="Ocupação do evento">
       <div class="occupancy-meta">
         <span>Vagas ocupadas</span>
         <strong>${occupancy.occupied} / ${eventConfig.capacity}</strong>
       </div>
-      <div class="occupancy-track">
+      <div
+        class="occupancy-track"
+        role="progressbar"
+        aria-valuenow="${occupancy.occupied}"
+        aria-valuemin="0"
+        aria-valuemax="${eventConfig.capacity}"
+        aria-label="${occupancy.occupied} de ${eventConfig.capacity} vagas ocupadas"
+      >
         <span style="width: ${occupancy.percentage}%"></span>
       </div>
       <small>Contagem atualizada somente com inscrições reais.</small>
@@ -120,7 +135,7 @@ export function renderPage() {
       <section class="hero" id="inicio" aria-labelledby="hero-title">
         <div class="hero-copy">
           <ul class="hero-chips" aria-label="Informações do evento">
-            <li>08 NOV 2026</li>
+            <li>${eventConfig.dateShort}</li>
             <li>${eventConfig.city.toUpperCase()}</li>
             <li class="chip-blue">${eventConfig.capacity} VAGAS</li>
           </ul>
@@ -130,8 +145,8 @@ export function renderPage() {
             ${renderCta(`Garantir minha vaga — ${formatCurrency(eventConfig.price)}`, "primary-cta", "cta-hero")}
             <span class="hero-note">${eventConfig.capacity} vagas · turma única · presencial</span>
           </div>
-          <div class="countdown" aria-live="polite" data-countdown-root>
-            <span class="countdown-label">Faltam</span>
+          <div class="countdown" role="timer" aria-label="Contagem regressiva para o dia do evento" data-countdown-root>
+            <span class="countdown-label" aria-hidden="true">Faltam</span>
             <div><strong data-countdown="days">000</strong><small>dias</small></div>
             <div><strong data-countdown="hours">00</strong><small>horas</small></div>
             <div><strong data-countdown="minutes">00</strong><small>min</small></div>
@@ -156,7 +171,7 @@ export function renderPage() {
         <dl class="hero-facts" aria-label="Resumo do evento">
           <div>
             <dt>Data</dt>
-            <dd>08 NOV 2026</dd>
+            <dd>${eventConfig.dayShort} · ${eventConfig.dateShort}</dd>
           </div>
           <div>
             <dt>Local</dt>
@@ -196,7 +211,7 @@ export function renderPage() {
         <div class="speaker-content">
           <div class="section-index reveal">01 / O educador</div>
           <h2 class="display reveal">Formado no padrão internacional. <em>Ensinando no Brasil.</em></h2>
-          <p class="speaker-lead reveal">Fidelis não é influenciador. É educador: formou-se nas escolas que definem o padrão mundial do corte masculino e hoje treina barbeiros do zero ao avançado.</p>
+          <p class="speaker-lead reveal">Fidelis é educador: formou-se em escolas internacionais de referência no corte masculino e hoje treina barbeiros do zero ao avançado.</p>
           <ul class="credentials reveal" aria-label="Credenciais de Fidelis">
             ${speaker.credentials
               .map(
@@ -211,7 +226,7 @@ export function renderPage() {
           </ul>
           <div class="method reveal">
             <h3>O que é a Fórmula D.F.S</h3>
-            <p>Sistema de corte criado pelo inglês Josh O'Meara-Patel (MENSPIRE), usado por barbeiros no mundo inteiro para entregar consistência em qualquer estilo. Em Sorocaba, você vê o método aplicado ao vivo — na sua frente, não numa tela.</p>
+            <p>Sistema de corte criado pelo inglês Josh O'Meara-Patel (MENSPIRE), com treinadores em vários países — no Brasil, o Fidelis. Em Sorocaba, você vê o método aplicado ao vivo, na sua frente, não numa tela.</p>
           </div>
           <a class="text-link reveal" href="${eventConfig.instagramUrl}" target="_blank" rel="noopener noreferrer" data-track="instagram-fidelis">
             Ver o trabalho do Fidelis
@@ -238,7 +253,7 @@ export function renderPage() {
             )
             .join("")}
         </div>
-        <div class="comparison reveal" aria-label="Evolução esperada">
+        <div class="comparison reveal" role="group" aria-label="O que o evento entrega">
           <div class="comparison-column comparison-before">
             <span>Hoje</span>
             <ul>
@@ -249,13 +264,16 @@ export function renderPage() {
           </div>
           <div class="comparison-divider" aria-hidden="true">${arrowIcon}</div>
           <div class="comparison-column comparison-after">
-            <span>Depois do dia 08</span>
+            <span>Saindo do dia 08</span>
             <ul>
-              <li>Padrão técnico de nível internacional</li>
-              <li>Preço definido pelo valor que você entrega</li>
-              <li>Clientela que volta e indica</li>
+              <li>Contato direto com um padrão técnico internacional</li>
+              <li>Um método para precificar pelo valor</li>
+              <li>Um plano para fidelizar e ser indicado</li>
             </ul>
           </div>
+        </div>
+        <div class="comparison-action reveal">
+          ${renderCta("Quero esse padrão — garantir vaga", "primary-cta", "cta-comparison")}
         </div>
       </section>
 
@@ -287,7 +305,7 @@ export function renderPage() {
         <div class="experience-copy">
           <div class="section-index reveal">04 / A experiência</div>
           <h2 class="display reveal">Um dia inteiro imerso <em>no nível em que você quer trabalhar.</em></h2>
-          <p class="reveal">Sala preparada para foco e troca real entre profissionais que levam o mercado a sério — do palco ao coffee break.</p>
+          <p class="reveal">Sala preparada para foco e troca real entre profissionais que levam o mercado a sério — até o coffee break.</p>
           <ul class="experience-list reveal">
             ${experienceItems
               .map((item) => `<li>${checkIcon}<span>${item}</span></li>`)
@@ -304,7 +322,7 @@ export function renderPage() {
           <figure>
             <img src="/assets/fidelis-demonstracao-520.webp" width="520" height="782" alt="Fidelis demonstrando técnica de corte com alunos observando" loading="lazy" />
           </figure>
-          <a class="venue-address" href="${eventConfig.venueUrl}" target="_blank" rel="noopener noreferrer" data-track="venue">
+          <a class="venue-address" href="${eventConfig.mapsUrl}" target="_blank" rel="noopener noreferrer" data-track="venue">
             <span>${eventConfig.venue}</span>
             <strong>${eventConfig.address}<br>${eventConfig.city}</strong>
             ${arrowIcon}
@@ -316,9 +334,17 @@ export function renderPage() {
         <div class="scarcity-inner">
           <div class="section-index reveal">05 / Vagas</div>
           <h2 class="display reveal"><span>${eventConfig.capacity}</span> cadeiras.<br><em>Nenhuma a mais.</em></h2>
-          <p class="reveal">A capacidade limitada mantém a sala próxima do palco e o networking relevante. Quando a última cadeira sair, acabou.</p>
+          <p class="reveal">A capacidade limitada mantém a sala próxima do palco e o networking relevante. Quando a última cadeira sair, as inscrições encerram.</p>
           ${renderOccupancy()}
-          ${renderCta("Quero uma das 75 cadeiras", "primary-cta reveal", "cta-scarcity")}
+          <div class="includes reveal">
+            <h3>Seu ingresso de ${formatCurrency(eventConfig.price)} inclui</h3>
+            <ul>
+              ${includedItems
+                .map((item) => `<li>${checkIcon}<span>${item}</span></li>`)
+                .join("")}
+            </ul>
+          </div>
+          ${renderCta(`Quero uma das ${eventConfig.capacity} cadeiras`, "primary-cta reveal", "cta-scarcity")}
         </div>
       </section>
 
@@ -342,11 +368,11 @@ export function renderPage() {
           </details>
           <details>
             <summary><span>Posso parcelar?</span><i aria-hidden="true"></i></summary>
-            <p>As condições de pagamento e parcelamento aparecem no checkout, no momento da inscrição.</p>
+            <p>As condições de parcelamento aparecem no checkout, antes de você finalizar a inscrição.</p>
           </details>
           <details>
             <summary><span>E se eu não puder ir no dia?</span><i aria-hidden="true"></i></summary>
-            <p>A política de transferência de titularidade é publicada nos termos do ingresso antes do evento. Qualquer caso é resolvido pelo canal oficial da organização.</p>
+            <p>Compras feitas pela internet têm direito de arrependimento de 7 dias, com reembolso integral (art. 49 do CDC). A política de transferência de titularidade é publicada nos termos do ingresso, e qualquer caso é resolvido pelo canal oficial da organização.</p>
           </details>
         </div>
       </section>
@@ -354,14 +380,14 @@ export function renderPage() {
       <section class="final-cta section section-dark">
         <div class="final-content">
           <div class="section-index reveal">07 / Decisão</div>
-          <h2 class="display reveal">08 de novembro. 75 cadeiras. <em>Uma decisão.</em></h2>
-          <p class="reveal">Enquanto você espera ter certeza, outro barbeiro da sua cidade garante a cadeira — e o posicionamento.</p>
+          <h2 class="display reveal">08 de novembro. ${eventConfig.capacity} cadeiras. <em>Uma decisão.</em></h2>
+          <p class="reveal">Enquanto você espera ter certeza, outro barbeiro da sua cidade garante uma das ${eventConfig.capacity} cadeiras.</p>
           <div class="final-action reveal">
             ${renderCta("Garantir minha vaga agora", "primary-cta", "cta-final")}
             <span>${formatCurrency(eventConfig.price)}</span>
           </div>
           <div class="final-meta reveal">
-            <span>08 NOV 2026</span>
+            <span>${eventConfig.dayShort} · ${eventConfig.dateShort}</span>
             <span>${eventConfig.venue}</span>
             <span>${eventConfig.city}</span>
             <span>ATÉ 18H</span>
@@ -377,7 +403,7 @@ export function renderPage() {
       <p>Workshop presencial com Fidelis · ${eventConfig.city}</p>
       <div>
         <a href="${eventConfig.instagramUrl}" target="_blank" rel="noopener noreferrer">Instagram do Fidelis</a>
-        <a href="${eventConfig.venueUrl}" target="_blank" rel="noopener noreferrer">Conheça o local</a>
+        <a href="${eventConfig.mapsUrl}" target="_blank" rel="noopener noreferrer">Como chegar</a>
       </div>
     </footer>
 

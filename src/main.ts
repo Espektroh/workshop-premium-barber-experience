@@ -93,12 +93,16 @@ document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((anchor) =>
   anchor.addEventListener("click", (event) => {
     const selector = anchor.getAttribute("href");
     const target = selector ? document.querySelector(selector) : null;
-    if (!target) return;
+    if (!(target instanceof HTMLElement)) return;
 
     event.preventDefault();
     target.scrollIntoView({
       behavior: reducedMotion ? "auto" : "smooth",
       block: "start",
     });
+    // Move o foco junto com a rolagem para manter a ordem de navegação
+    // por teclado (essencial para o skip link).
+    target.setAttribute("tabindex", "-1");
+    target.focus({ preventScroll: true });
   });
 });
