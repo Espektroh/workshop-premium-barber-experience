@@ -89,6 +89,33 @@ if (!reducedMotion) {
   });
 }
 
+const venueVideo = document.querySelector<HTMLVideoElement>(
+  "[data-venue-video]",
+);
+
+if (venueVideo) {
+  if (reducedMotion) {
+    // Sem autoplay para quem prefere movimento reduzido: o vídeo
+    // fica disponível com controles nativos.
+    venueVideo.setAttribute("controls", "");
+    venueVideo.preload = "metadata";
+  } else {
+    const videoObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          venueVideo.play().catch(() => {
+            venueVideo.setAttribute("controls", "");
+          });
+        } else {
+          venueVideo.pause();
+        }
+      },
+      { threshold: 0.25 },
+    );
+    videoObserver.observe(venueVideo);
+  }
+}
+
 document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((anchor) => {
   anchor.addEventListener("click", (event) => {
     const selector = anchor.getAttribute("href");

@@ -312,16 +312,21 @@ export function renderPage() {
               .join("")}
           </ul>
         </div>
-        <div class="venue-gallery reveal" id="local">
-          <figure class="venue-main">
-            <img src="/assets/venue-room.webp" width="326" height="265" alt="Auditório preparado para eventos na Cervejaria Imperatriz" loading="lazy" />
-          </figure>
-          <figure>
-            <img src="/assets/venue-networking.webp" width="326" height="265" alt="Área interna da Cervejaria Imperatriz" loading="lazy" />
-          </figure>
-          <figure>
-            <img src="/assets/fidelis-demonstracao-520.webp" width="520" height="782" alt="Fidelis demonstrando técnica de corte com alunos observando" loading="lazy" />
-          </figure>
+        <div class="venue-media reveal" id="local">
+          <video
+            class="venue-video"
+            muted
+            loop
+            playsinline
+            preload="none"
+            poster="/assets/local-poster.webp"
+            width="478"
+            height="850"
+            aria-label="Vídeo do espaço do evento na Cervejaria Imperatriz"
+            data-venue-video
+          >
+            <source src="/assets/local.mp4" type="video/mp4" />
+          </video>
           <a class="venue-address" href="${eventConfig.mapsUrl}" target="_blank" rel="noopener noreferrer" data-track="venue">
             <span>${eventConfig.venue}</span>
             <strong>${eventConfig.address}<br>${eventConfig.city}</strong>
@@ -330,27 +335,9 @@ export function renderPage() {
         </div>
       </section>
 
-      <section class="scarcity section">
-        <div class="scarcity-inner">
-          <div class="section-index reveal">05 / Vagas</div>
-          <h2 class="display reveal"><span>${eventConfig.capacity}</span> cadeiras.<br><em>Nenhuma a mais.</em></h2>
-          <p class="reveal">A capacidade limitada mantém a sala próxima do palco e o networking relevante. Quando a última cadeira sair, as inscrições encerram.</p>
-          ${renderOccupancy()}
-          <div class="includes reveal">
-            <h3>Seu ingresso de ${formatCurrency(eventConfig.price)} inclui</h3>
-            <ul>
-              ${includedItems
-                .map((item) => `<li>${checkIcon}<span>${item}</span></li>`)
-                .join("")}
-            </ul>
-          </div>
-          ${renderCta(`Quero uma das ${eventConfig.capacity} cadeiras`, "primary-cta reveal", "cta-scarcity")}
-        </div>
-      </section>
-
       <section class="faq section" id="faq">
         <div class="faq-heading">
-          <div class="section-index reveal">06 / Perguntas reais</div>
+          <div class="section-index reveal">05 / Perguntas reais</div>
           <h2 class="display reveal">Antes de garantir <em>sua cadeira.</em></h2>
         </div>
         <div class="faq-list reveal">
@@ -379,9 +366,18 @@ export function renderPage() {
 
       <section class="final-cta section section-dark">
         <div class="final-content">
-          <div class="section-index reveal">07 / Decisão</div>
-          <h2 class="display reveal">08 de novembro. ${eventConfig.capacity} cadeiras. <em>Uma decisão.</em></h2>
-          <p class="reveal">Enquanto você espera ter certeza, outro barbeiro da sua cidade garante uma das ${eventConfig.capacity} cadeiras.</p>
+          <div class="section-index reveal">06 / Decisão</div>
+          <h2 class="display reveal"><span>${eventConfig.capacity}</span> cadeiras. <em>Nenhuma a mais.</em></h2>
+          <p class="reveal">A sala é limitada para manter o networking relevante — quando a última cadeira sair, as inscrições encerram. Enquanto você espera ter certeza, outro barbeiro da sua cidade garante a dele.</p>
+          ${renderOccupancy()}
+          <div class="includes reveal">
+            <h3>Seu ingresso de ${formatCurrency(eventConfig.price)} inclui</h3>
+            <ul>
+              ${includedItems
+                .map((item) => `<li>${checkIcon}<span>${item}</span></li>`)
+                .join("")}
+            </ul>
+          </div>
           <div class="final-action reveal">
             ${renderCta("Garantir minha vaga agora", "primary-cta", "cta-final")}
             <span>${formatCurrency(eventConfig.price)}</span>

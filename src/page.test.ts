@@ -28,8 +28,19 @@ describe("renderPage", () => {
     const page = renderPage();
 
     expect(eventConfig.ctaUrl).toBe("");
-    expect(page.match(/class="[^"]*cta-button[^"]*"/g)).toHaveLength(6);
+    expect(page.match(/class="[^"]*cta-button[^"]*"/g)).toHaveLength(5);
     expect(page).not.toContain('class="cta-button" href=');
+  });
+
+  it("renders the venue video muted with poster instead of photos", () => {
+    const page = renderPage();
+
+    expect(page).toContain("data-venue-video");
+    expect(page).toContain("/assets/local.mp4");
+    expect(page).toContain('poster="/assets/local-poster.webp"');
+    expect(page).toContain("muted");
+    expect(page).not.toContain("venue-room.webp");
+    expect(page).not.toContain("venue-networking.webp");
   });
 
   it("renders five FAQ items", () => {
